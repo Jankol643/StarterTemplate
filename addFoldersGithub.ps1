@@ -1,13 +1,15 @@
-$RootFolder = "F:\RootFolder"
-$SubFolders = Get-ChildItem -Path $RootFolder -Directory
+# Get the current folder path
+$currentFolderPath = Get-Location
 
-Foreach($SubFolder in $SubFolders)
-{ 
-    $jpgPath = "$($SubFolder.FullName)\jpg"
-    New-Item -Path $jpgPath -ItemType Directory -Force
-    $jpgFiles = Get-ChildItem -Path $SubFolder.FullName -Filter "*.jpg"
-    Foreach($jpgFile in $jpgFiles)
-    {
-        Move-Item -Path $jpgFile.FullName -Destination "$jpgPath\"
-    }
+# Get all subfolders in the current folder
+$subfolders = Get-ChildItem -Path $currentFolderPath -Directory
+
+# Loop through each subfolder
+foreach ($subfolder in $subfolders) {
+    # Generate a random character
+    $randomCharacter = -join ((65..90) + (97..122) | Get-Random -Count 1 | ForEach-Object {[char]$_})
+
+    # Create a file with the random character in the subfolder
+    $filePath = Join-Path -Path $subfolder.FullName -ChildPath "random.txt"
+    $randomCharacter | Out-File -FilePath $filePath -Encoding ASCII
 }
